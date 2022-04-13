@@ -1,4 +1,5 @@
 import seaborn as sns
+import matplotlib.pyplot as plt
 import plotly
 import plotly.graph_objs as go
 import plotly.express as px
@@ -24,12 +25,59 @@ loss_eq_Calc.fillna(0,inplace=True) # 결측치 제거
 print(loss_eq_Calc.tail())
 
 last_index = len(loss_eq_Calc.index)-1
+last_date = loss_eq_Calc['date'][last_index].date().strftime("%d %B %Y")
 military_total_losses_cost = loss_eq_Calc.iloc[-1:,2:].sort_values(by=[last_index],axis=1,ascending=False).T # .T로 인덱스와 열을 바꿔줌
 military_total_losses_cost.rename(columns={last_index:'losses_cost'}, inplace = True)
 print(military_total_losses_cost)
-air_units = ['helicopter', 'aircraft']
-naval_units = ['naval ship']
-ground_units = ['APC', 'military auto', 'tank', 'field artillery', 'MRL','anti-aircraft warfare', 'mobile SRBM system']
+
+
+# 그래프 x,y축 지정을 위한 전처리
+
 military_total_losses_cost.reset_index(inplace=True)
 military_total_losses_cost.rename(columns={'index':'equipment_name'},inplace=True)
 print(military_total_losses_cost)
+
+
+# 각 카테고리 별 군대 구분
+air_units = ['helicopter', 'aircraft']
+naval_units = ['naval ship']
+ground_units = ['APC', 'military auto', 'tank', 'field artillery', 'MRL','anti-aircraft warfare', 'mobile SRBM system']
+
+def murge_category(unit):
+    if unit in ground_units:
+        return "Ground Units"
+    elif unit in naval_units:
+        return "Naval Units"
+    else:
+        return "Air Units"
+    
+military_total_losses_cost['unit_type'] = military_total_losses_cost['equipment_name'].apply(lambda x : murge_category(x))
+
+# Bar 그래프
+plt.figure(figsize=(14,12))
+fig = px.bar(military_total_losses_cost, x ='equipment_name', y='losses_cost',text_auto=True,
+             title=f'Russian Equipment Losses cost in Ukraine War \n({last_date})')
+fig.update_traces(textfont_size=12, textangle=0, cliponaxis=False)
+fig.update_layout(
+    xaxis_title="Equipment Name",
+    yaxis_title="Cost of Equipment Losses"
+)
+fig.update_yaxes(tickformat='$,',ticksuffix='M')
+fig.show()
+
+
+# Stacked Bar 그래프
+
+plt.figure(figsize=(14,10))
+fig = px.bar(
+    military_total_losses_cost, x='unit_type', y='losses_cost',color='equipment_name',text_auto=True,
+    title=f'Russian Equipment Losses cost in Ukraine War \n({last_date})'
+)
+
+fig.update_layout(
+    xaxis_title="Unit Type",
+    yaxis_title="Cost of Equipment Losses"
+)
+fig.update_yaxes(tickformat='$,',ticksuffix='M')
+fig.show()
+
