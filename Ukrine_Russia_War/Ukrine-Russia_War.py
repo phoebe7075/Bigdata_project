@@ -54,7 +54,7 @@ def murge_category(unit):
 military_total_losses_cost['unit_type'] = military_total_losses_cost['equipment_name'].apply(lambda x : murge_category(x))
 
 # Bar 그래프
-plt.figure(figsize=(14,12))
+#plt.figure(figsize=(14,12))
 fig = px.bar(military_total_losses_cost, x ='equipment_name', y='losses_cost',text_auto=True,
              title=f'Russian Equipment Losses cost in Ukraine War \n({last_date})')
 fig.update_traces(textfont_size=12, textangle=0, cliponaxis=False)
@@ -68,7 +68,7 @@ fig.show()
 
 # Stacked Bar 그래프
 
-plt.figure(figsize=(14,10))
+#plt.figure(figsize=(14,10))
 fig = px.bar(
     military_total_losses_cost, x='unit_type', y='losses_cost',color='equipment_name',text_auto=True,
     title=f'Russian Equipment Losses cost in Ukraine War \n({last_date})'
@@ -81,3 +81,29 @@ fig.update_layout(
 fig.update_yaxes(tickformat='$,',ticksuffix='M')
 fig.show()
 
+
+# Pie 그래프
+
+#plt.figure(figsize=(10,10))
+
+fig = px.pie(military_total_losses_cost, values='losses_cost', names=military_total_losses_cost['unit_type'], 
+             title=f'Percentages of Russian Equipment Losses cost in Ukraine War \n({last_date})')
+fig.show()
+
+
+
+# 선분 그래프
+rank_list = military_total_losses_cost['equipment_name'].values.tolist()
+
+plt.figure(figsize=(14,8))
+sns.set_style("darkgrid")
+for equip in rank_list:
+    sns.lineplot(x='date', y=equip, data=loss_eq_Calc, marker='o')
+    
+
+plt.xlabel('Date',size=16)
+plt.ylabel('Cost of Equipment Losses', size=16)
+plt.title('Russian Equipment Losses Cost in Ukraine War 2022')
+plt.legend(labels=rank_list)
+
+plt.show()
