@@ -63,7 +63,7 @@ fig.update_layout(
     yaxis_title="Cost of Equipment Losses"
 )
 fig.update_yaxes(tickformat='$,',ticksuffix='M')
-#fig.show()
+fig.show()
 
 
 # Stacked Bar 그래프
@@ -79,7 +79,7 @@ fig.update_layout(
     yaxis_title="Cost of Equipment Losses"
 )
 fig.update_yaxes(tickformat='$,',ticksuffix='M')
-#fig.show()
+fig.show()
 
 
 # Pie 그래프
@@ -88,7 +88,7 @@ fig.update_yaxes(tickformat='$,',ticksuffix='M')
 
 fig = px.pie(military_total_losses_cost, values='losses_cost', names=military_total_losses_cost['unit_type'], 
              title=f'Percentages of Russian Equipment Losses cost in Ukraine War \n({last_date})')
-#fig.show()
+fig.show()
 
 
 
@@ -145,16 +145,14 @@ for i in range(1,last_index+1):
     cost_per_day['losses_day'][i] = cost_per_day['losses'][i] - cost_per_day['losses'][i-1]
     
 cost_per_day.drop('losses',axis=1,inplace=True)
-cost_per_day.sort_values(by='losses_day',ascending=False, inplace=True)
-cost_per_day.reset_index()
 print(cost_per_day.head())
 
-fig = px.bar(cost_per_day, x =cost_per_day.index, y='losses_day',text_auto=True,
+fig = px.bar(cost_per_day, x ='date', y='losses_day',text_auto=True,
              title=f'Russian Equipment Losses cost per Day in Ukraine War \n({last_date})')
 fig.update_traces(textfont_size=12, textangle=0, cliponaxis=False)
 fig.update_layout(
-    xaxis_title="Equipment Name",
+    xaxis_title="Date",
     yaxis_title="Cost of Equipment Losses"
 )
-fig.update_yaxes(tickformat='$,.1f',ticksuffix='M')
+fig.update_yaxes(tickformat='$,',ticksuffix='M')
 fig.show()
