@@ -1,5 +1,6 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 import plotly
 import plotly.graph_objs as go
 import plotly.express as px
@@ -28,7 +29,6 @@ last_index = len(loss_eq_Calc.index)-1
 last_date = loss_eq_Calc['date'][last_index].date().strftime("%d %B %Y")
 military_total_losses_cost = loss_eq_Calc.iloc[-1:,2:].sort_values(by=[last_index],axis=1,ascending=False).T # .T로 인덱스와 열을 바꿔줌
 military_total_losses_cost.rename(columns={last_index:'losses_cost'}, inplace = True)
-print(military_total_losses_cost)
 
 
 # 그래프 x,y축 지정을 위한 전처리
@@ -63,7 +63,7 @@ fig.update_layout(
     yaxis_title="Cost of Equipment Losses"
 )
 fig.update_yaxes(tickformat='$,',ticksuffix='M')
-fig.show()
+#fig.show()
 
 
 # Stacked Bar 그래프
@@ -79,7 +79,7 @@ fig.update_layout(
     yaxis_title="Cost of Equipment Losses"
 )
 fig.update_yaxes(tickformat='$,',ticksuffix='M')
-fig.show()
+#fig.show()
 
 
 # Pie 그래프
@@ -88,11 +88,11 @@ fig.show()
 
 fig = px.pie(military_total_losses_cost, values='losses_cost', names=military_total_losses_cost['unit_type'], 
              title=f'Percentages of Russian Equipment Losses cost in Ukraine War \n({last_date})')
-fig.show()
+#fig.show()
 
 
 
-# 선분 그래프
+# 선분 그래프 (일자별 손실량 각 군장비별)
 rank_list = military_total_losses_cost['equipment_name'].values.tolist()
 
 plt.figure(figsize=(14,8))
@@ -106,4 +106,55 @@ plt.ylabel('Cost of Equipment Losses', size=16)
 plt.title('Russian Equipment Losses Cost in Ukraine War 2022')
 plt.legend(labels=rank_list)
 
+plt.gca().yaxis.set_major_formatter(mticker.FormatStrFormatter('$%.1fM')) # matplotlib에서 y축 단위설정 함수
 plt.show()
+
+# 선분 그래프 (일자별 손실량 각 군 편제 별)
+
+# 각 일자별 손실량 합산
+total_loss_cost_per_day = loss_eq_Calc.iloc[:,:1].copy()
+total_loss_cost_per_day['ground_units'] = loss_eq_Calc[ground_units].sum(axis=1)
+total_loss_cost_per_day['naval_units'] = loss_eq_Calc[naval_units].sum(axis=1)
+total_loss_cost_per_day['air_units'] = loss_eq_Calc[air_units].sum(axis=1)
+
+print(total_loss_cost_per_day.tail())
+
+# 그래프 그리기
+units = ['ground_units', 'naval_units', 'air_units']
+plt.figure(figsize=(14,8))
+sns.set_style("darkgrid")
+for unit in units:
+    sns.lineplot(x='date', y=unit, data=total_loss_cost_per_day, marker='o')
+
+plt.xlabel('Date',size=16)
+plt.ylabel('Cost of Equipment Losses Per Unit', size=16)
+plt.title('Russian Military Units Equipment Losses Cost in Ukraine War 2022')
+plt.legend(labels=units)
+plt.gca().yaxis.set_major_formatter(mticker.FormatStrFormatter('$%.1fM')) 
+
+plt.show()
+
+
+# 손실량 일자별로 정렬한 Bar 그래프
+
+cost_per_day = loss_eq_Calc.iloc[:,:1].copy()
+cost_per_day['losses'] = loss_eq_Calc.iloc[:,2:].sum(axis=1)
+cost_per_day['losses_day'] = cost_per_day['losses']
+
+for i in range(1,last_index+1):
+    cost_per_day['losses_day'][i] = cost_per_day['losses'][i] - cost_per_day['losses'][i-1]
+    
+cost_per_day.drop('losses',axis=1,inplace=True)
+cost_per_day.sort_values(by='losses_day',ascending=False, inplace=True)
+cost_per_day.reset_index()
+print(cost_per_day.head())
+
+fig = px.bar(cost_per_day, x =cost_per_day.index, y='losses_day',text_auto=True,
+             title=f'Russian Equipment Losses cost per Day in Ukraine War \n({last_date})')
+fig.update_traces(textfont_size=12, textangle=0, cliponaxis=False)
+fig.update_layout(
+    xaxis_title="Equipment Name",
+    yaxis_title="Cost of Equipment Losses"
+)
+fig.update_yaxes(tickformat='$,.1f',ticksuffix='M')
+fig.show()
