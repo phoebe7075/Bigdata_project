@@ -57,10 +57,11 @@ military_total_losses_cost['unit_type'] = military_total_losses_cost['equipment_
 #plt.figure(figsize=(14,12))
 fig = px.bar(military_total_losses_cost, x ='equipment_name', y='losses_cost',text_auto=True,
              title=f'Russian Equipment Losses cost in Ukraine War \n({last_date})')
-fig.update_traces(textfont_size=12, textangle=0, cliponaxis=False)
+fig.update_traces(textfont_size=18, textangle=0, cliponaxis=False)
 fig.update_layout(
     xaxis_title="Equipment Name",
-    yaxis_title="Cost of Equipment Losses"
+    yaxis_title="Cost of Equipment Losses",
+    font_size = 18
 )
 fig.update_yaxes(tickformat='$,',ticksuffix='M')
 fig.show()
@@ -76,7 +77,8 @@ fig = px.bar(
 
 fig.update_layout(
     xaxis_title="Unit Type",
-    yaxis_title="Cost of Equipment Losses"
+    yaxis_title="Cost of Equipment Losses",
+    font_size = 18
 )
 fig.update_yaxes(tickformat='$,',ticksuffix='M')
 fig.show()
@@ -88,6 +90,9 @@ fig.show()
 
 fig = px.pie(military_total_losses_cost, values='losses_cost', names=military_total_losses_cost['unit_type'], 
              title=f'Percentages of Russian Equipment Losses cost in Ukraine War \n({last_date})')
+fig.update_layout(
+    font_size = 22
+)
 fig.show()
 
 
@@ -101,8 +106,8 @@ for equip in rank_list:
     sns.lineplot(x='date', y=equip, data=loss_eq_Calc, marker='o')
     
 
-plt.xlabel('Date',size=16)
-plt.ylabel('Cost of Equipment Losses', size=16)
+plt.xlabel('Date',fontsize=18)
+plt.ylabel('Cost of Equipment Losses', fontsize=18)
 plt.title('Russian Equipment Losses Cost in Ukraine War 2022')
 plt.legend(labels=rank_list)
 
@@ -126,8 +131,8 @@ sns.set_style("darkgrid")
 for unit in units:
     sns.lineplot(x='date', y=unit, data=total_loss_cost_per_day, marker='o')
 
-plt.xlabel('Date',size=16)
-plt.ylabel('Cost of Equipment Losses Per Unit', size=16)
+plt.xlabel('Date',fontsize=18)
+plt.ylabel('Cost of Equipment Losses Per Unit',fontsize=18)
 plt.title('Russian Military Units Equipment Losses Cost in Ukraine War 2022')
 plt.legend(labels=units)
 plt.gca().yaxis.set_major_formatter(mticker.FormatStrFormatter('$%.1fM')) 
@@ -149,10 +154,11 @@ print(cost_per_day.head())
 
 fig = px.bar(cost_per_day, x ='date', y='losses_day',text_auto=True,
              title=f'Russian Equipment Losses cost per Day in Ukraine War \n({last_date})')
-fig.update_traces(textfont_size=12, textangle=0, cliponaxis=False)
+fig.update_traces(textfont_size=100, textangle=0, cliponaxis=False, textposition='outside')
 fig.update_layout(
     xaxis_title="Date",
-    yaxis_title="Cost of Equipment Losses"
+    yaxis_title="Cost of Equipment Losses",
+    font_size = 18
 )
-fig.update_yaxes(tickformat='$,',ticksuffix='M')
+fig.update_yaxes(tickformat='$,.0f',ticksuffix='M')
 fig.show()
