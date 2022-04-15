@@ -33,3 +33,7 @@
     - 헬리콥터는 Mi-8 / Mi-17이 주로 사용됨. Mi-8은 $9M, 17은 인도에게 2008년 계약 채결 당시 대당 $16.7M정도에 계약된듯 하다 (https://www.helicopterspecs.com/2019/09/mil-mi-8-hip.html) 중간값인 $12.8M으로 계산하겠음.
 - 해군
     - 뒤져본 결과 3월 24일 격침시킨 사라토프, 오르스크의 종류는 앨리게이터급 상륙함임. 2020년 건조된 프로젝트23900 상륙작전함의 건설비용 $688M (https://en.wikipedia.org/wiki/Project_23900_amphibious_assault_ship). 그 전에 건조됐으므로 $600M 급으로 생각 하겠음.
+
+
+
+데이터 분석 결과 : [텀프로젝트 분석기-내 블로그](https://velog.io/@galion/%ED%85%80-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B2%B0%EA%B3%BC-%EB%B6%84%EC%84%9D%EA%B8%B0)
