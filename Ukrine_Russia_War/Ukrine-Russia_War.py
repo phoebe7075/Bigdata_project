@@ -53,6 +53,8 @@ def murge_category(unit):
     
 military_total_losses_cost['unit_type'] = military_total_losses_cost['equipment_name'].apply(lambda x : murge_category(x))
 
+
+print(military_total_losses_cost)
 # Bar 그래프
 #plt.figure(figsize=(14,12))
 fig = px.bar(military_total_losses_cost, x ='equipment_name', y='losses_cost',text_auto=True,
