@@ -98,6 +98,16 @@ fig.update_layout(
 fig.show()
 
 
+# Pie 그래프 추가
+
+# fig = px.pie(military_total_losses_cost, values='losses_cost', names=military_total_losses_cost['equipment_name'], 
+#              title=f'Percentages of Russian Equipment Losses cost in Ukraine War \n({last_date})')
+# fig.update_layout(
+#     font_size = 22
+# )
+# fig.show()
+
+
 
 # 선분 그래프 (일자별 손실량 각 군장비별)
 rank_list = military_total_losses_cost['equipment_name'].values.tolist()
@@ -107,13 +117,12 @@ sns.set_style("darkgrid")
 for equip in rank_list:
     sns.lineplot(x='date', y=equip, data=loss_eq_Calc, marker='o')
     
-
 plt.xlabel('Date',fontsize=18)
 plt.ylabel('Cost of Equipment Losses', fontsize=18)
 plt.title('Russian Equipment Losses Cost in Ukraine War 2022')
 plt.legend(labels=rank_list)
 
-plt.gca().yaxis.set_major_formatter(mticker.FormatStrFormatter('$%.1fM')) # matplotlib에서 y축 단위설정 함수
+plt.gca().yaxis.set_major_formatter(mticker.FormatStrFormatter('$%iM')) # matplotlib에서 y축 단위설정 함수
 plt.show()
 
 # 선분 그래프 (일자별 손실량 각 군 편제 별)
@@ -133,11 +142,13 @@ sns.set_style("darkgrid")
 for unit in units:
     sns.lineplot(x='date', y=unit, data=total_loss_cost_per_day, marker='o')
 
+
+
 plt.xlabel('Date',fontsize=18)
 plt.ylabel('Cost of Equipment Losses Per Unit',fontsize=18)
 plt.title('Russian Military Units Equipment Losses Cost in Ukraine War 2022')
 plt.legend(labels=units)
-plt.gca().yaxis.set_major_formatter(mticker.FormatStrFormatter('$%.1fM')) 
+plt.gca().yaxis.set_major_formatter(mticker.FormatStrFormatter('$%iM')) 
 
 plt.show()
 
