@@ -157,16 +157,18 @@ plt.show()
 
 cost_per_day = loss_eq_Calc.iloc[:,:1].copy()
 cost_per_day['losses'] = loss_eq_Calc.iloc[:,2:].copy().sum(axis=1)
-cost_per_day['losses_day'] = cost_per_day['losses'].copy()
-for i in range(1,last_index+1):
-    cost_per_day['losses_day'][i] = (cost_per_day['losses_day'][i] - cost_per_day['losses'][i-1])
-    
-cost_per_day.drop('losses',axis=1,inplace=True)
-print(cost_per_day.head())
 
-fig = px.bar(cost_per_day, x ='date', y='losses_day',text_auto=True,
+cost_per_day_2 = loss_eq_Calc.iloc[:,:1].copy()
+cost_per_day_2['losses_day'] = cost_per_day['losses'].copy()
+for i in range(1,last_index+1):
+    cost_per_day_2['losses_day'][i] = (cost_per_day['losses'][i] - cost_per_day['losses'][i-1])
+    
+#cost_per_day.drop('losses',axis=1,inplace=True)
+print(cost_per_day_2.head())
+
+fig = px.bar(cost_per_day_2, x ='date', y='losses_day',text_auto=True,
              title=f'Russian Equipment Losses cost per Day in Ukraine War \n({last_date})')
-fig.update_traces(textfont_size=100, textangle=0, cliponaxis=False, textposition='outside')
+fig.update_traces(textfont_size=18, textangle=0, cliponaxis=False, textposition='outside')
 fig.update_layout(
     xaxis_title="Date",
     yaxis_title="Cost of Equipment Losses",
